@@ -1,21 +1,20 @@
 # singleton instance of global params
 
-class GlobalParams:
+class RobotParams:
     __instance = None
-
     robot = None
 
     @staticmethod
     def get_instance():
-        if GlobalParams.__instance is None:
-            GlobalParams()
-        return GlobalParams.__instance
+        if RobotParams.__instance is None:
+            RobotParams()
+        return RobotParams.__instance
 
     def __init__(self):
-        if GlobalParams.__instance is not None:
+        if RobotParams.__instance is not None:
             raise Exception("This class is a singleton!")
         else:
-            GlobalParams.__instance = self
+            RobotParams.__instance = self
             self.robot = None
             self.timestep = None
             self.max_speed = None

@@ -1,48 +1,28 @@
 # ignore errors in this file
-from controller import Robot
 from controller import Supervisor
-from tcp_socket_send import start_client, send_data
-from movement import Movement, TeleportType
-from global_params import GlobalParams
-from threading import Thread
+from teleport_data_collection import Movement, TeleportType
 from time import sleep as Sleep
-import enum
-from tcp_socket_receive import start_command_server, run_server_in_thread, set_callback
-import asyncio
 import threading
-
-
-class OperationMode(enum.Enum):
-    RECEIVE_COMMANDS = 1
-    SEND_DATA = 2
-
-
-operation_mode = OperationMode.RECEIVE_COMMANDS
+from communication.communication_interface import send_data
+from configs_init import configs, config_actions
+from robot_params.robot_params import RobotParams
+from robot_params.operations_interface import OperationMode, operation_mode
+from communication.communication_interface import start_server
 
 robot = Supervisor()
-GlobalParams.get_instance().set_robot(robot)
-GlobalParams.get_instance().set_timestep(64)
-GlobalParams.get_instance().set_max_speed(6.28)
-GlobalParams.get_instance().set_start_time(0.0)
+RobotParams.get_instance().set_robot(robot)
+RobotParams.get_instance().set_timestep(64)
+RobotParams.get_instance().set_max_speed(6.28)
+RobotParams.get_instance().set_start_time(0.0)
 
 start_time = robot.getTime()
 distance_sensors = []
 
-timestep = GlobalParams.get_instance().get_timestep()
+timestep = RobotParams.get_instance().get_timestep()
 width = 4
 height = 4
 movement = Movement.get_instance()
 movement.set_teleport_type(TeleportType.TELEPORT8x8, width, height)
-
-
-def print_node_rotation(node_name):
-    node = robot.getFromDef(node_name)
-    print(node.getOrientation())
-
-
-def print_node_position(node_name):
-    node = robot.getFromDef(node_name)
-    print(node.getPosition())
 
 
 def sensors_setup():
@@ -69,8 +49,8 @@ def main_loop():
     front_right.setPosition(float('inf'))
     front_right.setVelocity(0.0)
 
-    max_speed = GlobalParams.get_instance().get_max_speed()
-    timestep = GlobalParams.get_instance().get_timestep()
+    max_speed = RobotParams.get_instance().get_max_speed()
+    timestep = RobotParams.get_instance().get_timestep()
 
     left_speed = max_speed
     right_speed = max_speed
@@ -82,7 +62,7 @@ def main_loop():
     offset_y = 0
 
     while robot.step(timestep) != -1:
-        if operation_mode == OperationMode.SEND_DATA:
+        if operation_mode() == OperationMode.SEND_DATA:
             if finished == 1:
                 print("SEND END")
                 send_data("END")
@@ -149,12 +129,28 @@ def collect_current_data(i_index, j_index):
     send_data(data)
 
 
+def action1():
+    print("Action 1")
+
+
+def action2():
+    print("Action 2")
+
+
+def action3():
+    print("Action 3")
+
+
 if __name__ == '__main__':
-    if operation_mode == OperationMode.RECEIVE_COMMANDS:
-        server_thread = threading.Thread(target=run_server_in_thread, daemon=True)
-        server_thread.start()
-        set_callback(set_coords)
-    else:
-        start_client()
+    configs()
+    config_actions(action1, action2, action3)
+
+    # external communication mechanism
+    server_thread = threading.Thread(target=start_server, daemon=True)
+    server_thread.start()
+
+    send_data("START")
+
+    # simulation loop
     sensors_setup()
     main_loop()
