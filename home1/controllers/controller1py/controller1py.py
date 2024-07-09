@@ -8,6 +8,7 @@ from configs_init import configs, config_actions
 from robot_params.robot_params import RobotParams
 from robot_params.operations_interface import OperationMode, operation_mode
 from communication.communication_interface import start_server
+from typing import Dict
 
 robot = Supervisor()
 RobotParams.get_instance().set_robot(robot)
@@ -129,27 +130,34 @@ def collect_current_data(i_index, j_index):
     send_data(data)
 
 
-def action1():
-    print("Action 1")
+def action_request_data() -> Dict:
+    print("Request data not implemented yet")
+    raise Exception("Not implemented yet")
 
 
-def action2():
-    print("Action 2")
+def action_go_to(json_data:Dict) -> bool:
+    print("go to not implemented yet")
+    raise Exception("Not implemented yet")
 
 
-def action3():
-    print("Action 3")
+def action_teleport_to(json_data:Dict) -> Dict:
+    print("called teleport")
+    x = json_data["x"]
+    y = json_data["y"]
+    set_coords(x, y)
+
+    return {
+        "response": True
+    }
 
 
 if __name__ == '__main__':
     configs()
-    config_actions(action1, action2, action3)
+    config_actions(action_request_data, action_go_to, action_teleport_to)
 
     # external communication mechanism
     server_thread = threading.Thread(target=start_server, daemon=True)
     server_thread.start()
-
-    send_data("START")
 
     # simulation loop
     sensors_setup()

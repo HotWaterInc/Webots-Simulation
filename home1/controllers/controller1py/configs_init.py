@@ -4,6 +4,7 @@ from robot_params import RobotParams, OperationMode, OperationModeInterface
 from communication import CommunicationInterface
 from action_controller import detach_action
 from action_controller import ActionController
+from typing import Callable, Dict
 
 
 def configs_communication():
@@ -16,15 +17,16 @@ def configs_communication():
 
 
 def configs_operation_mode():
-    configs = OperationModeInterface.get_instance()
-    configs.operation_mode = OperationMode.RECEIVE_COMMANDS
+    config = OperationModeInterface.get_instance()
+    config.operation_mode = OperationMode.RECEIVE_COMMANDS
 
 
-def config_actions(action1, action2, action3):
-    actions = ActionController.get_instance()
-    actions.action1 = action1
-    actions.action2 = action2
-    actions.action3 = action3
+def config_actions(action_request_data: Callable[[], Dict], action_go_to: Callable[[Dict], Dict],
+                   action_teleport_to: Callable[[Dict], Dict]):
+    actions: ActionController = ActionController.get_instance()
+    actions.action_request_data = action_request_data
+    actions.action_go_to = action_go_to
+    actions.action_teleport_to = action_teleport_to
 
 
 def configs():

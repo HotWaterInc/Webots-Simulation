@@ -45,7 +45,8 @@ def send_pending_data():
 
 def receive_data(data):
     communication = CommunicationInterface.get_instance()
-    communication.receive_data(data)
+    response = communication.receive_data(data)
+    send_data(response)
 
 
 def set_server_started():

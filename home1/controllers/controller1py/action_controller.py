@@ -1,9 +1,12 @@
+from typing import Dict, TypedDict, Callable
+from enum import Enum
+
 class ActionController:
     __instance = None
 
-    action1 = None
-    action2 = None
-    action3 = None
+    action_go_to: Callable[[Dict], Dict]
+    action_teleport_to: Callable[[Dict], Dict]
+    action_request_data: Callable[[], Dict]
 
     @staticmethod
     def get_instance():
@@ -17,10 +20,30 @@ class ActionController:
         else:
             ActionController.__instance = self
 
+class ActionTypes(Enum):
+    TELEPORT_TO = "TELEPORT_TO"
+    GO_TO = "GO_TO"
+    REQUEST_DATA = "REQUEST_DATA"
 
-def detach_action(json_data):
-    print("Detaching action")
+class ActionFormat(TypedDict):
+    action_type: str
+    args: Dict[str, any]
+
+def detach_action(json_data: Dict) -> None:
     actions = ActionController.get_instance()
+    print(json_data)
+    return None
+    action_type: ActionTypes = json_data["action_type"]
+    print("in detach action")
+    print(json_data)
+    if action_type not in ActionTypes:
+        raise Exception("Invalid action type")
 
-    actions.action1()
-    actions.action2()
+    if action_type == ActionTypes.TELEPORT_TO:
+        actions.action_go_to(json_data["args"])
+
+    elif action_type == ActionTypes.GO_TO:
+        actions.action_teleport_to(json_data["args"])
+
+    elif action_type == ActionTypes.REQUEST_DATA:
+        actions.action_request_data(json_data["args"])
