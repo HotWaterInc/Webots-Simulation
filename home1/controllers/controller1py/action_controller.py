@@ -1,12 +1,18 @@
-from typing import Dict, TypedDict, Callable
+from typing import Dict, TypedDict, Callable, List, Union
 from enum import Enum
+from communication.communication_interface import JsonDataAction, action_types, \
+    ActionTypeTeleportAbsolute, ActionTypeTeleportRelative, ActionTypeRotateAbsolute, ActionTypeRotateRelative, \
+    ActionTypeSample
+
 
 class ActionController:
     __instance = None
 
-    action_go_to: Callable[[Dict], Dict]
-    action_teleport_to: Callable[[Dict], Dict]
-    action_request_data: Callable[[], Dict]
+    action_teleport_relative: Callable[[float, float], None] = None
+    action_teleport_absolute: Callable[[float, float], None] = None
+    action_rotate_absolute: Callable[[float], None] = None
+    action_rotate_relative: Callable[[float], None] = None
+    action_sample: Callable[[], None] = None
 
     @staticmethod
     def get_instance():
@@ -20,30 +26,25 @@ class ActionController:
         else:
             ActionController.__instance = self
 
-class ActionTypes(Enum):
-    TELEPORT_TO = "TELEPORT_TO"
-    GO_TO = "GO_TO"
-    REQUEST_DATA = "REQUEST_DATA"
 
-class ActionFormat(TypedDict):
-    action_type: str
-    args: Dict[str, any]
-
-def detach_action(json_data: Dict) -> None:
-    actions = ActionController.get_instance()
+def detach_action(json_data: JsonDataAction) -> None:
     print(json_data)
-    return None
-    action_type: ActionTypes = json_data["action_type"]
-    print("in detach action")
-    print(json_data)
-    if action_type not in ActionTypes:
-        raise Exception("Invalid action type")
+    if json_data.get("action_type") is None:
+        raise Exception("action_type is required in json_data")
+    if json_data["action_type"] not in action_types:
+        raise Exception(f"action_type {json_data['action_type']} is not a valid action type")
 
-    if action_type == ActionTypes.TELEPORT_TO:
-        actions.action_go_to(json_data["args"])
+    action_controller: ActionController = ActionController.get_instance()
 
-    elif action_type == ActionTypes.GO_TO:
-        actions.action_teleport_to(json_data["args"])
-
-    elif action_type == ActionTypes.REQUEST_DATA:
-        actions.action_request_data(json_data["args"])
+    if json_data["action_type"] == ActionTypeTeleportAbsolute:
+        action_controller.action_teleport_absolute(json_data["x"], json_data["y"])
+    elif json_data["action_type"] == ActionTypeTeleportRelative:
+        action_controller.action_teleport_relative(json_data["dx"], json_data["dy"])
+    elif json_data["action_type"] == ActionTypeRotateAbsolute:
+        action_controller.action_rotate_absolute(json_data["angle"])
+    elif json_data["action_type"] == ActionTypeRotateRelative:
+        action_controller.action_rotate_relative(json_data["dangle"])
+    elif json_data["action_type"] == ActionTypeSample:
+        action_controller.action_sample()
+    else:
+        raise Exception(f"action_type {json_data['action_type']} is not a valid action type")

@@ -1,6 +1,5 @@
 # ignore errors in this file
 from controller import Supervisor
-from teleport_data_collection import Movement, TeleportType
 from time import sleep as Sleep
 import threading
 from communication.communication_interface import send_data
@@ -20,10 +19,6 @@ start_time = robot.getTime()
 distance_sensors = []
 
 timestep = RobotParams.get_instance().get_timestep()
-width = 4
-height = 4
-movement = Movement.get_instance()
-movement.set_teleport_type(TeleportType.TELEPORT8x8, width, height)
 
 
 def sensors_setup():
@@ -37,6 +32,8 @@ def sensors_setup():
             distance_sensors.append(device)
 
             sensor_node = supervisor.getFromDef(device.getName())
+
+    names = [sensor.getName() for sensor in distance_sensors]
 
 
 def main_loop():
@@ -57,103 +54,123 @@ def main_loop():
     right_speed = max_speed
 
     robot_node = robot.getFromDef("Robot")
-    translation_field = robot_node.getField("translation")
-    finished = 0
-    offset_x = -width / 2
-    offset_y = 0
+
+    global set_coords_signal_bool, set_coords_signal_json
+    global set_rotation_signal_bool, set_rotation_signal_json
+    global set_sample_signal_bool
 
     while robot.step(timestep) != -1:
-        if operation_mode() == OperationMode.SEND_DATA:
-            if finished == 1:
-                print("SEND END")
-                send_data("END")
-                return 0
+        if set_coords_signal_bool:
+            x = set_coords_signal_json["x"]
+            y = set_coords_signal_json["y"]
+            set_robot_coords(x, y)
+            set_coords_signal_bool = False
 
-            if finished == 0:
-                finished = teleport(translation_field, offset_x, offset_y)
-                Sleep(0.2)
-                print("sleepy time")
-        else:
-            pass
+        if set_rotation_signal_bool:
+            angle = set_rotation_signal_json["angle"]
+            robot_node = robot.getFromDef("Robot")
+            rotation_field = robot_node.getField("rotation")
+            rotation_field.setSFRotation([0, 1, 0, angle])
+            set_rotation_signal_bool = False
+
+        if set_sample_signal_bool:
+            data = collect_current_data()
+            send_data(data)
+            set_sample_signal_bool = False
 
 
-def set_coords(x, y):
+set_coords_signal_bool = False
+set_coords_signal_json = {
+    "x": 0,
+    "y": 0
+}
+
+set_rotation_signal_bool = False
+set_rotation_signal_json = {
+    "angle": 0
+}
+
+set_sample_signal_bool = False
+
+
+def get_robot_coords():
+    position = robot.getFromDef("Robot").getPosition()
+    x = position[0]
+    y = position[1]
+    return x, y
+
+
+def set_coords_signal(x, y):
     print("Setting coordinates", x, y)
+    global set_coords_signal_bool, set_coords_signal_json
+    set_coords_signal_json["x"] = x
+    set_coords_signal_json["y"] = y
+    set_coords_signal_bool = True
+
+
+def set_robot_coords(x, y):
     robot_node = robot.getFromDef("Robot")
     translation_field = robot_node.getField("translation")
     translation_field.setSFVec3f([x, y, 0.05])
-
-
-def teleport(translation_field, offset_x=0.0, offset_y=0.0):
-    movement = Movement.get_instance()
-
-    result = movement.get_teleport_indices()
-    if result is None:
-        return 1
-
-    i, j = result
-    x_coord, y_coord = movement.get_teleport_coords(i, j)
-
-    x_coord += offset_x
-    y_coord += offset_y
-
-    print(f"Teleporting to {x_coord}, {y_coord}")
-    translation_field.setSFVec3f([x_coord, y_coord, 0.05])
     robot.step(timestep)
 
-    collect_current_data(i, j)
-    return 0
 
-
-def collect_current_data(i_index, j_index):
+def collect_current_data():
     sensor_data = []
     for sensor in distance_sensors:
         sensor_data.append(round(sensor.getValue(), 5))
 
-    name = "" + str(i_index) + "_" + str(j_index)
     position = robot.getFromDef("Robot").getPosition()
     x = position[0]
     y = position[1]
-    print(f"Data collected: {i_index, j_index} at {x}, {y}")
+
+    rotation = robot.getFromDef("Robot").getOrientation()
+    angle = rotation[3]
 
     data = {
         "data": sensor_data,
-        "name": name,
         "params": {
-            "i": i_index,
-            "j": j_index,
             "x": x,
-            "y": y
+            "y": y,
+            "angle": angle
         }
     }
 
-    send_data(data)
+    return data
 
 
-def action_request_data() -> Dict:
-    print("Request data not implemented yet")
-    raise Exception("Not implemented yet")
+def detach_robot_sample():
+    print("called sampling")
+    # json_data = collect_current_data()
+    # send_data(json_data)
+    global set_sample_signal_bool
+    set_sample_signal_bool = True
+    print("ended calling sampling")
 
 
-def action_go_to(json_data:Dict) -> bool:
-    print("go to not implemented yet")
-    raise Exception("Not implemented yet")
+def detach_robot_teleport_absolute(x: float, y: float):
+    set_coords_signal(x, y)
 
 
-def action_teleport_to(json_data:Dict) -> Dict:
-    print("called teleport")
-    x = json_data["x"]
-    y = json_data["y"]
-    set_coords(x, y)
+def detach_robot_teleport_relative(dx: float, dy: float):
+    print("relative start")
+    x, y = get_robot_coords()
+    set_coords_signal(x + dx, y + dy)
+    print("relative end")
 
-    return {
-        "response": True
-    }
+
+def detach_robot_rotate_absolute(angle: float):
+    send_data({"action_type": "rotate_absolute", "angle": angle})
+
+
+def detach_robot_rotate_relative(dangle: float):
+    send_data({"action_type": "rotate_relative", "dangle": dangle})
 
 
 if __name__ == '__main__':
     configs()
-    config_actions(action_request_data, action_go_to, action_teleport_to)
+    config_actions(detach_robot_teleport_absolute, detach_robot_teleport_relative, detach_robot_rotate_absolute,
+                   detach_robot_rotate_relative, detach_robot_sample)
 
     # external communication mechanism
     server_thread = threading.Thread(target=start_server, daemon=True)

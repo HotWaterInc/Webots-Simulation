@@ -13,6 +13,7 @@ def configs_communication():
 
     communication.start_server = start_websockets
     communication.send_data = send_data
+    # communication.send_data = sync_send
     communication.receive_data = detach_action
 
 
@@ -21,12 +22,17 @@ def configs_operation_mode():
     config.operation_mode = OperationMode.RECEIVE_COMMANDS
 
 
-def config_actions(action_request_data: Callable[[], Dict], action_go_to: Callable[[Dict], Dict],
-                   action_teleport_to: Callable[[Dict], Dict]):
+def config_actions(action_teleport_absolute: Callable[[float, float], any],
+                   action_teleport_relative: Callable[[float, float], any],
+                   action_rotate_absolute: Callable[[float], any],
+                   action_rotate_relative: Callable[[float], any],
+                   action_sample: Callable[[], any]):
     actions: ActionController = ActionController.get_instance()
-    actions.action_request_data = action_request_data
-    actions.action_go_to = action_go_to
-    actions.action_teleport_to = action_teleport_to
+    actions.action_teleport_absolute = action_teleport_absolute
+    actions.action_teleport_relative = action_teleport_relative
+    actions.action_rotate_absolute = action_rotate_absolute
+    actions.action_rotate_relative = action_rotate_relative
+    actions.action_sample = action_sample
 
 
 def configs():
