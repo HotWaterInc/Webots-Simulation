@@ -65,6 +65,7 @@ def main_loop():
             y = set_coords_signal_json["y"]
             set_robot_coords(x, y)
             set_coords_signal_bool = False
+            send_ok_status()
 
         if set_rotation_signal_bool:
             angle = set_rotation_signal_json["angle"]
@@ -72,11 +73,13 @@ def main_loop():
             rotation_field = robot_node.getField("rotation")
             rotation_field.setSFRotation([0, 1, 0, angle])
             set_rotation_signal_bool = False
+            send_ok_status()
 
         if set_sample_signal_bool:
             data = collect_current_data()
             send_data(data)
             set_sample_signal_bool = False
+            # send_ok_status()
 
 
 set_coords_signal_bool = False
@@ -93,6 +96,10 @@ set_rotation_signal_json = {
 set_sample_signal_bool = False
 
 
+def send_ok_status():
+    send_data({"status": "ok"})
+
+
 def get_robot_coords():
     position = robot.getFromDef("Robot").getPosition()
     x = position[0]
@@ -101,7 +108,6 @@ def get_robot_coords():
 
 
 def set_coords_signal(x, y):
-    print("Setting coordinates", x, y)
     global set_coords_signal_bool, set_coords_signal_json
     set_coords_signal_json["x"] = x
     set_coords_signal_json["y"] = y
@@ -140,12 +146,8 @@ def collect_current_data():
 
 
 def detach_robot_sample():
-    print("called sampling")
-    # json_data = collect_current_data()
-    # send_data(json_data)
     global set_sample_signal_bool
     set_sample_signal_bool = True
-    print("ended calling sampling")
 
 
 def detach_robot_teleport_absolute(x: float, y: float):
@@ -153,10 +155,8 @@ def detach_robot_teleport_absolute(x: float, y: float):
 
 
 def detach_robot_teleport_relative(dx: float, dy: float):
-    print("relative start")
     x, y = get_robot_coords()
     set_coords_signal(x + dx, y + dy)
-    print("relative end")
 
 
 def detach_robot_rotate_absolute(angle: float):

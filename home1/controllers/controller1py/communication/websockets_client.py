@@ -14,16 +14,8 @@ async def listen(websocket):
         receive_data(json.loads(message))
 
 
-async def send_data_websockets(websocket, message):
+async def send_data_string_websockets(websocket, message):
     await websocket.send(message)
-
-
-def send_data_async(json_data: Dict):
-    asyncio.create_task(send_data(json_data))
-
-
-def send_data_sync(json_data: Dict):
-    asyncio.run(send_data(json_data))
 
 
 def send_data(json_data: Dict):
@@ -32,14 +24,10 @@ def send_data(json_data: Dict):
     message = json.dumps(json_data)
 
     try:
-        asyncio.create_task(send_data_websockets(websocket, message))
-    except RuntimeError:
-        asyncio.run(send_data_websockets(websocket, message))
-
-    # if asyncio.get_running_loop() is None:
-    #     asyncio.run(send_data_websockets(websocket, message))
-    # else:
-    #     asyncio.create_task(send_data_websockets(websocket, message))
+        loop = asyncio.get_running_loop()
+        loop.create_task(send_data_string_websockets(websocket, message))
+    except RuntimeError:  # No running event loop
+        asyncio.run(send_data_string_websockets(websocket, message))
 
 
 async def start_websockets_client(set_server_started=(lambda: None)):
