@@ -1,1 +1,16 @@
 /.idea
+
+# Ignore Python bytecode files
+*.pyc
+*.pyo
+
+# Ignore all __pycache__ directories
+__pycache__/
+
+# Other common ignores
+.env
+*.env
+.DS_Store
+.vscode/
+.idea/
+*.log
