@@ -34,8 +34,8 @@ WorldInfo {
   title "Break Room"
 }
 Viewpoint {
-  orientation -0.09132818816815681 -0.9006390359359767 0.4248629061170629 5.484691267084116
-  position -22.114161251957505 8.571540598753547 21.829513580449234
+  orientation -0.2884242524617077 0.4816425177435926 0.827545730273269 1.0485366945110635
+  position -0.9244514886422588 -1.2647232787893086 1.326895252547276
 }
 TexturedBackground {
   texture "entrance_hall"
@@ -58,13 +58,13 @@ Floor {
   }
 }
 DEF Robot Robot {
-  translation -0.006101668885275753 0.4839804648281478 0.09662348652424188
+  translation -0.00637258 0.483977 0.136623
   rotation -0.003386341258141432 -2.6138796809001934e-05 0.9999942659883839 -3.1394499723037024
   children [
     HingeJoint {
       jointParameters HingeJointParameters {
         position 5.219507262218936
-        anchor 0.2 0 -0.01
+        anchor 0.2 0 -0.02
       }
       device [
         RotationalMotor {
@@ -72,8 +72,8 @@ DEF Robot Robot {
         }
       ]
       endPoint Solid {
-        translation -0.20000678157080998 -0.00026411207850388953 -0.010208049920834995
-        rotation 0.5737078761652115 0.5836557677891175 0.57463485584543 2.0847053062922574
+        translation -0.1999999999999958 0 -0.02
+        rotation 0.5737078761652116 0.5836557677891172 0.5746348558454303 2.0847053062922574
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -86,6 +86,36 @@ DEF Robot Robot {
           }
         ]
         name "solid(1)"
+        boundingObject USE Wheel
+        physics DEF Physics_wheel Physics {
+        }
+      }
+    }
+    DEF True_north HingeJoint {
+      jointParameters HingeJointParameters {
+        position 5.219507262218936
+        anchor 0.2 0 -0.02
+      }
+      device [
+        RotationalMotor {
+          name "NORTH"
+        }
+      ]
+      endPoint Solid {
+        translation -0.00013786 0.140936 0.027867
+        rotation 0.5737078761652116 0.5836557677891172 0.5746348558454303 2.0847053062922574
+        children [
+          DEF Wheel Shape {
+            appearance PBRAppearance {
+              baseColor 0.988235 0.913725 0.309804
+            }
+            geometry Cylinder {
+              height 0.05
+              radius 0.1
+            }
+          }
+        ]
+        name "solid(2)"
         boundingObject USE Wheel
         physics DEF Physics_wheel Physics {
         }
@@ -586,7 +616,7 @@ DEF Robot Robot {
     HingeJoint {
       jointParameters HingeJointParameters {
         position 5.2194493525433305
-        anchor 0.2 0 -0.01
+        anchor 0.2 0 -0.02
       }
       device [
         RotationalMotor {
@@ -594,8 +624,8 @@ DEF Robot Robot {
         }
       ]
       endPoint Solid {
-        translation 0.20000204924374645 -5.675622003074225e-07 -0.009857326863454785
-        rotation 0.5736949811637356 0.5836425555050457 0.5746611488443261 2.084665341295625
+        translation 0.20003 0 -0.02
+        rotation 0.5736949811637357 0.5836425555050457 0.5746611488443258 2.0846653412956244
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -614,6 +644,8 @@ DEF Robot Robot {
     }
   ]
   boundingObject USE Body
+  physics Physics {
+  }
   controller "controller1py"
   supervisor TRUE
 }
@@ -1027,7 +1059,6 @@ Cabinet {
   }
 }
 Cabinet {
-  hidden rotation_7 0 0 -1 1.9188900536892283e-05
   translation -0.66 -2.49 0
   rotation 0 0 1 1.57079
   name "cabinet(5)"
@@ -1055,8 +1086,6 @@ Cabinet {
   }
 }
 Cabinet {
-  hidden rotation_7 0 0 1 1.580175229170596e-05
-  hidden rotation_11 0 0 1 1.580175229170596e-05
   translation -1.52 -2.5 0.1
   rotation 0 0 -1 -1.5707853071795865
   name "cabinet(6)"

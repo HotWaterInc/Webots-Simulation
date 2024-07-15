@@ -2,7 +2,7 @@ from typing import Dict, TypedDict, Callable, List, Union
 from enum import Enum
 from communication.communication_interface import JsonDataAction, action_types, \
     ActionTypeTeleportAbsolute, ActionTypeTeleportRelative, ActionTypeRotateAbsolute, ActionTypeRotateRelative, \
-    ActionTypeSample
+    ActionTypeSample, ActionTypeContRotateAbsolute, ActionTypeContForward
 
 
 class ActionController:
@@ -13,6 +13,9 @@ class ActionController:
     action_rotate_absolute: Callable[[float], None] = None
     action_rotate_relative: Callable[[float], None] = None
     action_sample: Callable[[], None] = None
+
+    action_continous_rotate_absolute: Callable[[float], None] = None
+    action_continous_forward: Callable[[float], None] = None
 
     @staticmethod
     def get_instance():
@@ -46,5 +49,9 @@ def detach_action(json_data: JsonDataAction) -> None:
         action_controller.action_rotate_relative(json_data["dangle"])
     elif json_data["action_type"] == ActionTypeSample:
         action_controller.action_sample()
+    elif json_data["action_type"] == ActionTypeContRotateAbsolute:
+        action_controller.action_continous_rotate_absolute(json_data["angle"])
+    elif json_data["action_type"] == ActionTypeContForward:
+        action_controller.action_continous_forward(json_data["distance"])
     else:
         raise Exception(f"action_type {json_data['action_type']} is not a valid action type")

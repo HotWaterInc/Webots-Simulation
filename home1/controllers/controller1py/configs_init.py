@@ -26,13 +26,19 @@ def config_actions(action_teleport_absolute: Callable[[float, float], any],
                    action_teleport_relative: Callable[[float, float], any],
                    action_rotate_absolute: Callable[[float], any],
                    action_rotate_relative: Callable[[float], any],
-                   action_sample: Callable[[], any]):
+                   action_sample: Callable[[], any],
+                   action_continous_rotate_absolute: Callable[[float], any],
+                   action_continous_forward: Callable[[float], any]
+                   ):
     actions: ActionController = ActionController.get_instance()
     actions.action_teleport_absolute = action_teleport_absolute
     actions.action_teleport_relative = action_teleport_relative
     actions.action_rotate_absolute = action_rotate_absolute
     actions.action_rotate_relative = action_rotate_relative
     actions.action_sample = action_sample
+
+    actions.action_continous_rotate_absolute = action_continous_rotate_absolute
+    actions.action_continous_forward = action_continous_forward
 
 
 def configs():
