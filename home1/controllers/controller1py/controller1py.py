@@ -83,6 +83,9 @@ def main_loop():
     starting_positionxy = [0, 0]
     init_forward = 0
 
+    rotations = 0
+    prev_angle = 0
+
     while robot.step(timestep) != -1:
         if set_coords_signal_bool:
             x = set_coords_signal_json["x"]
@@ -100,7 +103,7 @@ def main_loop():
             send_ok_status()
 
         if set_sample_signal_bool:
-            data = collect_current_data()
+            data = collect_current_data(robot_node)
             send_data(data)
             set_sample_signal_bool = False
             # send_ok_status()
@@ -108,9 +111,14 @@ def main_loop():
         if set_rotate_continous_signal_bool:
             final_angle = set_rotate_continous_signal_json["angle"]
             robot_node = robot.getFromDef("Robot")
+
             rotation_field = robot_node.getField("rotation")
             current_rotation = rotation_field.getSFRotation()
             current_angle = current_rotation[3]
+            print(current_angle, current_rotation)
+            if current_angle < prev_angle:
+                rotations += 1
+            prev_angle = current_angle
 
             if math.fabs(current_angle - final_angle) < 0.1:
                 set_rotate_continous_signal_bool = False
@@ -212,7 +220,7 @@ def set_robot_coords(x, y):
     robot.step(timestep)
 
 
-def collect_current_data():
+def collect_current_data(robot_node):
     sensor_data = []
     for sensor in distance_sensors:
         sensor_data.append(round(sensor.getValue(), 5))
@@ -221,8 +229,9 @@ def collect_current_data():
     x = round(position[0], 5)
     y = round(position[1], 5)
 
-    rotation = robot.getFromDef("Robot").getOrientation()
-    angle = round(rotation[3], 5)
+    rotation_field = robot_node.getField("rotation")
+    current_rotation = rotation_field.getSFRotation()
+    angle = current_rotation[3]
 
     data = {
         "status": "ok",
