@@ -1,5 +1,6 @@
 # ignore errors in this file
 from controller import Supervisor
+from controller import Camera
 from time import sleep as Sleep
 import threading
 from communication.communication_interface import send_data
@@ -86,7 +87,17 @@ def main_loop():
     rotations = 0
     prev_angle = 0
 
+    camera = robot.getDevice("CAM_NAME")
+    camera.enable(timestep)
+
+    saved = 0
+
     while robot.step(timestep) != -1:
+        if saved == 0:
+            result = camera.saveImage('my_camera_image.jpg', 100)
+            print(result, "image saved")
+            saved = 1
+
         if set_coords_signal_bool:
             x = set_coords_signal_json["x"]
             y = set_coords_signal_json["y"]

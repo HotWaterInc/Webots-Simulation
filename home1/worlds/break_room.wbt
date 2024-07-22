@@ -34,8 +34,8 @@ WorldInfo {
   title "Break Room"
 }
 Viewpoint {
-  orientation 0.018839061159945592 0.9807035737094387 -0.19459082786233053 0.846086002139714
-  position -11.623732411592574 2.222896234562348 12.37278541895467
+  orientation -0.08445242393910128 -0.9795464447258312 0.18263775818760664 4.979510190534785
+  position -1.1461169177582917 0.6359403919111053 5.287515560651203
 }
 TexturedBackground {
   texture "entrance_hall"
@@ -57,13 +57,217 @@ Floor {
     }
   }
 }
+PottedTree {
+  translation -0.87 4.52 0
+  name "potted tree(3)"
+}
+Cabinet {
+  hidden position_6_0 -9.59724028160025e-06
+  hidden translation_7 -5.718858129925388e-06 5.478273390480126e-11 0
+  hidden rotation_7 0 0 -0.9999999999999999 1.9158628724942167e-05
+  translation 1.80004 4.71 0
+  rotation 0 0 1 -1.5708053071795867
+  name "cabinet(4)"
+  outerThickness 0.02
+  rowsHeights [
+    0.7, 0.3, 0.3
+  ]
+  columnsWidths [
+    0.6
+  ]
+  layout [
+    "LeftSidedDoor (1, 1, 1, 1, 1.5)"
+    "Shelf (1, 3, 1, 0)"
+    "Shelf (1, 2, 1, 0)"
+    "Shelf (1, 1, 1, 1)"
+  ]
+  handle CabinetHandle {
+    handleColor 0.533333 0.541176 0.521569
+  }
+  primaryAppearance MattePaint {
+    baseColor 0.729412 0.741176 0.713725
+  }
+  secondaryAppearance GlossyPaint {
+    baseColor 0.643137 0 0
+  }
+}
+Cabinet {
+  hidden position_6_0 -9.59724028160025e-06
+  hidden translation_7 -5.718858129925388e-06 5.478273390480126e-11 0
+  hidden rotation_7 0 0 -0.9999999999999999 1.9158628724942167e-05
+  translation 1.09004 4.71 0
+  rotation 0 0 1 -1.5708053071795867
+  name "cabinet(8)"
+  outerThickness 0.02
+  rowsHeights [
+    0.7, 0.3, 0.3
+  ]
+  columnsWidths [
+    0.6
+  ]
+  layout [
+    "LeftSidedDoor (1, 1, 1, 1, 1.5)"
+    "Shelf (1, 3, 1, 0)"
+    "Shelf (1, 2, 1, 0)"
+    "Shelf (1, 1, 1, 1)"
+  ]
+  handle CabinetHandle {
+    handleColor 0.533333 0.541176 0.521569
+  }
+  primaryAppearance MattePaint {
+    baseColor 0.729412 0.741176 0.713725
+  }
+  secondaryAppearance GlossyPaint {
+    baseColor 0.643137 0 0
+  }
+}
 DEF Robot Robot {
-  translation -0.00637258 0.483977 0.136623
-  rotation -0.003386341258141432 -2.6138796809001934e-05 0.9999942659883839 -3.1394499723037024
+  translation -0.0056296225030135014 0.48399375334699507 0.10948727861007644
+  rotation 4.2026551353108386e-05 -2.4814321890389262e-05 0.9999999988090094 -3.139450196090052
   children [
-    HingeJoint {
+    DEF Stabilizator2 Solid {
+      translation 0 0.19 -0.09
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Cylinder {
+            height 0.04
+            radius 0.05
+          }
+        }
+      ]
+      name "solid(9)"
+      boundingObject Cylinder {
+        height 0.04
+        radius 0.05
+      }
+      physics Physics {
+      }
+    }
+    DEF Stabilizator Solid {
+      translation 0 -0.2 -0.09
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Cylinder {
+            height 0.04
+            radius 0.05
+          }
+        }
+      ]
+      name "solid(8)"
+      boundingObject Cylinder {
+        height 0.04
+        radius 0.05
+      }
+      physics Physics {
+      }
+    }
+    DEF camera_support Solid {
+      translation 0 -5.15213e-15 0.24
+      rotation 1 0 0 1.01503e-06
+      children [
+        DEF CAM Camera {
+          translation 0 0 0.39
+          rotation 0 0 1 1.5708
+          name "CAM_NAME"
+          fieldOfView 1.5
+          width 220
+          height 220
+        }
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Cone {
+            bottomRadius 0.05
+            height 0.3
+          }
+        }
+      ]
+      name "solid(7)"
+    }
+    DEF eyeball2 Solid {
+      translation -0.09 0.17 0.13
+      rotation 1 0 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.964706 0.380392 0.317647
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.025
+          }
+        }
+      ]
+      name "solid(6)"
+    }
+    DEF eyeball1 Solid {
+      translation 0.08 0.17 0.13
+      rotation 1 0 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            baseColor 0.964706 0.380392 0.317647
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.025
+          }
+        }
+      ]
+      name "solid(5)"
+    }
+    DEF eye2 Solid {
+      translation -0.08 0.11 0.13
+      rotation 1 0 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.075
+          }
+        }
+      ]
+      name "solid(4)"
+    }
+    DEF eye1 Solid {
+      translation 0.08 0.11 0.13
+      rotation 1 0 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+            metalness 0
+          }
+          geometry Sphere {
+            radius 0.075
+          }
+        }
+      ]
+      name "solid(3)"
+    }
+    DEF nose Solid {
+      translation 0 0.24 0.04
+      rotation 1 0 0 -1.5707953071795862
+      children [
+        Shape {
+          appearance PBRAppearance {
+          }
+          geometry Cone {
+            bottomRadius 0.05
+            height 0.1
+          }
+        }
+      ]
+      name "solid(2)"
+    }
+    DEF Wheel1 HingeJoint {
       jointParameters HingeJointParameters {
-        position 5.219507262218936
+        position 5.219539234769751
         anchor 0.2 0 -0.02
       }
       device [
@@ -72,8 +276,8 @@ DEF Robot Robot {
         }
       ]
       endPoint Solid {
-        translation -0.1999999999999707 0 -0.02
-        rotation 0.5737078761652143 0.5836557677891152 0.5746348558454295 2.0847053062922245
+        translation -0.19999999999993778 0 -0.02
+        rotation 0.5737141373563897 0.5836434563009475 0.5746411093147598 2.084723649296504
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -89,39 +293,11 @@ DEF Robot Robot {
         boundingObject USE Wheel
         physics DEF Physics_wheel Physics {
         }
+        linearVelocity 4.4277119891876694e-07 -4.959159728559704e-09 1.4321693891012512e-06
+        angularVelocity 5.507001048130645e-09 -5.073386791927428e-06 -7.3595024027066884e-09
       }
     }
-    DEF True_north HingeJoint {
-      jointParameters HingeJointParameters {
-        position 5.219507262218936
-        anchor 0.2 0 -0.02
-      }
-      device [
-        RotationalMotor {
-          name "NORTH"
-        }
-      ]
-      endPoint Solid {
-        translation -0.00013785999998844334 0.14093599999999543 0.027866999999998646
-        rotation 0.5737078761652131 0.5836557677891159 0.57463485584543 2.084705306292239
-        children [
-          DEF Wheel Shape {
-            appearance PBRAppearance {
-              baseColor 0.988235 0.913725 0.309804
-            }
-            geometry Cylinder {
-              height 0.05
-              radius 0.1
-            }
-          }
-        ]
-        name "solid(2)"
-        boundingObject USE Wheel
-        physics DEF Physics_wheel Physics {
-        }
-      }
-    }
-    Group {
+    DEF Sensos Group {
       children [
         DEF distance_sensor_24 DistanceSensor {
           translation 0 0 0.16
@@ -613,9 +789,9 @@ DEF Robot Robot {
         radius 0.2
       }
     }
-    HingeJoint {
+    DEF Wheel2 HingeJoint {
       jointParameters HingeJointParameters {
-        position 5.2194493525433305
+        position 5.219499792353147
         anchor 0.2 0 -0.02
       }
       device [
@@ -625,7 +801,7 @@ DEF Robot Robot {
       ]
       endPoint Solid {
         translation 0.20003 0 -0.02
-        rotation 0.573694981163735 0.5836425555050457 0.5746611488443266 2.084665341295607
+        rotation 0.573704859382563 0.5836231322665683 0.5746710135409593 2.0846942786104394
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -640,6 +816,8 @@ DEF Robot Robot {
         boundingObject USE Wheel
         physics DEF Physics_wheel Physics {
         }
+        linearVelocity -8.077031477100941e-07 3.912001074183074e-09 -5.591080122532862e-07
+        angularVelocity 2.6695487131794047e-09 -4.808201093715188e-06 -5.350536200747167e-09
       }
     }
   ]
@@ -648,6 +826,8 @@ DEF Robot Robot {
   }
   controller "controller1py"
   supervisor TRUE
+  linearVelocity -6.75840632261954e-07 -3.446846039908e-10 1.856348090018826e-08
+  angularVelocity 3.728804621472259e-09 -4.829912935751664e-06 -5.340867765511712e-09
 }
 Transform {
   scale 10 10 10
@@ -704,8 +884,8 @@ CeilingLight {
   pointLightCastShadows TRUE
 }
 Wall {
-  translation -2.65 0 0
-  size 0.05 5 0.62
+  translation -2.65 -0.02 0
+  size 0.05 1 0.62
   appearance DEF SMALL_WALLS Roughcast {
     colorOverride 0.890196 0.803922 1
     textureTransform TextureTransform {
@@ -912,10 +1092,12 @@ Wall {
   size 0.06 6.2 2.5
 }
 Door {
+  hidden translation_5 0.001141676516188135 1.1611117063492493e-05 -2.886579864025407e-15
+  hidden rotation_5 0 0 -1 0.0002982627028451481
   translation 0 4.8 0
   rotation 0 0 -1 1.5708
   size 0.06 1 2.5
-  position -0.0016398011420117656
+  position -0.0022367964923231385
   frameSize 0.01 0.05 0.05
   frameAppearance MattePaint {
     baseColor 0.133333 0.0666667 0
@@ -932,12 +1114,16 @@ Sofa {
   rotation 0 0 -1 -1.5707953071795862
 }
 Sofa {
-  translation 5.77999 2.81 0
+  translation 5.77999 4.23 0
   rotation 0 0 -1 -1.5707953071795862
   name "sofa(1)"
 }
 PottedTree {
   translation 2.38 -2.15 0
+}
+PottedTree {
+  translation -2.32 -1.62 0
+  name "potted tree(1)"
 }
 PottedTree {
   translation -5.78 -2.17 0
@@ -1059,6 +1245,9 @@ Cabinet {
   }
 }
 Cabinet {
+  hidden position_6_0 -2.8786373752340917e-05
+  hidden translation_7 -5.718858129925388e-06 5.478273390480126e-11 0
+  hidden rotation_7 0 0 -1 1.915865190452081e-05
   translation -0.66 -2.49 0
   rotation 0 0 1 1.57079
   name "cabinet(5)"
@@ -1086,6 +1275,12 @@ Cabinet {
   }
 }
 Cabinet {
+  hidden position_6_0 2.370441437996223e-05
+  hidden translation_7 3.924373417305102e-06 3.0956182062169546e-11 0
+  hidden rotation_7 0 0 1 1.5776382302475328e-05
+  hidden position_10_0 2.3704414379991795e-05
+  hidden translation_11 3.924373417301482e-06 3.0956182062169546e-11 0
+  hidden rotation_11 0 0 1 1.5776382302475328e-05
   translation -1.52 -2.5 0.1
   rotation 0 0 -1 -1.5707853071795865
   name "cabinet(6)"
@@ -1674,17 +1869,30 @@ Keyboard {
   name "keyboard(5)"
 }
 OfficeChair {
-  translation -4.168759944993409 -1.981039947215401 -0.0014153366323299554
-  rotation 0.0006902769639116501 -0.001701646786711385 0.9999983139565418 0.7853981957737064
+  hidden position_0_0 -6.463562087688501e-05
+  hidden rotation_1 0 0 -1 3.855205431857342e-05
+  translation -4.168759944973799 -1.9810399472349056 -0.0014153366642590537
+  rotation 0.0006903190233240247 -0.0017016293041226059 0.9999983139572574 0.7853981960414486
   name "office chair(3)"
 }
 OfficeChair {
-  translation -3.999999923780116 0.07000029842890658 -0.0014153366323299832
-  rotation -0.0073288862108167475 -0.9999731433496054 2.5334095885322003e-06 0.0014054613464764497
+  hidden position_0_0 -6.463562087866137e-05
+  hidden rotation_1 0 0 -1 3.855205431857342e-05
+  translation -3.999999923780038 0.07000029840124763 -0.001415336664259026
+  rotation -0.007304083783129371 -0.9999733248205512 2.7242713330341744e-06 0.0014054610487117239
   name "office chair(4)"
 }
 OfficeChair {
-  translation -4.069999944993412 1.8500000527845992 -0.0014153366323299554
-  rotation 0.0006902769639116519 -0.0017016467867114317 0.9999983139565419 0.7853981957737053
+  hidden position_0_0 -6.463562087777319e-05
+  hidden rotation_1 0 0 -1 3.855205431857342e-05
+  translation -4.069999944973802 1.8500000527650948 -0.0014153366642590537
+  rotation 0.0006903190233240405 -0.0017016293041225788 0.9999983139572572 0.7853981960414478
   name "office chair(5)"
+}
+OfficeChair {
+  hidden position_0_0 -6.714490464432288e-05
+  hidden rotation_1 0 0 -1 0.0006420436055768088
+  translation -2.2825200008248787 2.0881600012143466 -0.0014153359333850812
+  rotation 0.0007027120971540908 -5.536263207492768e-06 0.9999997530824988 3.1415900076195613
+  name "office chair(1)"
 }
