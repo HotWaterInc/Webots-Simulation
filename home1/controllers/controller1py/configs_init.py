@@ -26,19 +26,36 @@ def config_actions(action_teleport_absolute: Callable[[float, float], any],
                    action_teleport_relative: Callable[[float, float], any],
                    action_rotate_absolute: Callable[[float], any],
                    action_rotate_relative: Callable[[float], any],
-                   action_sample: Callable[[], any],
+
+                   action_sample_distance: Callable[[], any],
+                   action_sample_image: Callable[[], any],
+                   action_sample_image_inference: Callable[[], any],
+
                    action_continous_rotate_absolute: Callable[[float], any],
-                   action_continous_forward: Callable[[float], any]
+                   action_continous_forward: Callable[[float], any],
+
+                   action_W: Callable[[], any],
+                   action_A: Callable[[], any],
+                   action_S: Callable[[], any],
+                   action_D: Callable[[], any]
                    ):
     actions: ActionController = ActionController.get_instance()
     actions.action_teleport_absolute = action_teleport_absolute
     actions.action_teleport_relative = action_teleport_relative
     actions.action_rotate_absolute = action_rotate_absolute
     actions.action_rotate_relative = action_rotate_relative
-    actions.action_sample = action_sample
+
+    actions.action_sample_distance = action_sample_distance
+    actions.action_sample_image = action_sample_image
+    actions.action_sample_image_inference = action_sample_image_inference
 
     actions.action_continous_rotate_absolute = action_continous_rotate_absolute
     actions.action_continous_forward = action_continous_forward
+
+    actions.action_W = action_W
+    actions.action_A = action_A
+    actions.action_S = action_S
+    actions.action_D = action_D
 
 
 def configs():

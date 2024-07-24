@@ -72,11 +72,18 @@ ActionTypeRotateRelative = "rotate_relative"
 ActionTypeContRotateAbsolute = "cont_rotate_absolute"
 ActionTypeContForward = "cont_forward"
 
-ActionTypeSample = "sample"
+ActionTypeContW = "w"
+ActionTypeContA = "a"
+ActionTypeContS = "s"
+ActionTypeContD = "d"
+
+ActionTypeSampleDistance = "sample_distance"
+ActionTypeSampleImage = "sample_image"
+ActionTypeSampleImageInference = "sample_image_inference"
 
 action_types: List[str] = [
     ActionTypeTeleportAbsolute, ActionTypeTeleportRelative, ActionTypeRotateAbsolute, ActionTypeRotateRelative,
-    ActionTypeSample, ActionTypeContRotateAbsolute, ActionTypeContForward
+    ActionTypeSampleDistance, ActionTypeContRotateAbsolute, ActionTypeContForward, ActionTypeSampleImageInference
 ]
 
 JsonDataAction = Union[
@@ -104,10 +111,10 @@ def send_pending_data():
 def receive_data(data: JsonDataAction):
     communication: CommunicationInterface = CommunicationInterface.get_instance()
 
-    if data.get("action_type") is None:
-        raise Exception("action_type is required in json_data")
-    if data["action_type"] not in action_types:
-        raise Exception(f"action_type {data['action_type']} is not a valid action type")
+    # if data.get("action_type") is None:
+    #     raise Exception("action_type is required in json_data")
+    # if data["action_type"] not in action_types:
+    #     raise Exception(f"action_type {data['action_type']} is not a valid action type")
 
     communication.receive_data(data)
 
