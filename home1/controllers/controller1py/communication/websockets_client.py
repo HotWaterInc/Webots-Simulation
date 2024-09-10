@@ -10,19 +10,30 @@ websocket_global = None
 
 
 async def listen(websocket):
-    async for message in websocket:
-        receive_data(json.loads(message))
+    try:
+        async for message in websocket:
+            receive_data(json.loads(message))
+    except websockets.exceptions.ConnectionClosed:
+        print("Connection closed, attempting to reconnect...")
+    finally:
+        global websocket_global
+        websocket_global = None
 
 
 async def send_data_string_websockets(websocket, message):
-    await websocket.send(message)
+    if websocket and websocket.open:
+        await websocket.send(message)
+    else:
+        print("WebSocket is not open. Unable to send message.")
 
 
 def send_data(json_data: Dict):
     global websocket_global
     websocket = websocket_global
     message = json.dumps(json_data)
-
+    if websocket is None:
+        print("WebSocket not connected. Unable to send data.")
+        return
     try:
         loop = asyncio.get_running_loop()
         loop.create_task(send_data_string_websockets(websocket, message))
@@ -33,10 +44,18 @@ def send_data(json_data: Dict):
 async def start_websockets_client(set_server_started=(lambda: None)):
     uri = f"ws://localhost:{PORT}"
     global websocket_global
-    async with websockets.connect(uri) as websocket:
-        websocket_global = websocket
-        set_server_started()
-        await listen(websocket)
+    try:
+        async with websockets.connect(
+                uri,
+                ping_interval=None,  # Disable ping/pong mechanism
+                ping_timeout=None
+        ) as websocket:
+            websocket_global = websocket
+            set_server_started()
+            print(f"Connected to WebSocket server at {uri}")
+            await listen(websocket)
+    except (websockets.exceptions.ConnectionClosed, OSError) as e:
+        print(f"Connection failed: {e}.")
 
 
 def start_websockets(set_server_started=(lambda: None)):

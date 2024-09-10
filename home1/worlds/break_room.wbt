@@ -34,8 +34,8 @@ WorldInfo {
   title "Break Room"
 }
 Viewpoint {
-  orientation -0.054254839352805756 -0.983602876296104 0.17199358752241972 5.135635785712987
-  position -2.743227228011499 0.956452971126283 6.713603519542967
+  orientation 0.4959180034143069 -0.46613860572338395 -0.7326528060028344 4.453018044604324
+  position -1.6588698586535688 -10.949728957022733 31.057578739159553
 }
 TexturedBackground {
   texture "entrance_hall"
@@ -62,10 +62,7 @@ PottedTree {
   name "potted tree(3)"
 }
 Cabinet {
-  hidden position_6_0 -1.91944805632005e-05
-  hidden translation_7 -8.58363435314995e-06 1.234148894191378e-10 0
-  hidden rotation_7 0 0 -1 2.875587463465508e-05
-  translation 1.80004 4.71 0
+  translation 1.35004 4.71 0
   rotation 0 0 1 -1.5708053071795867
   name "cabinet(4)"
   outerThickness 0.02
@@ -92,12 +89,36 @@ Cabinet {
   }
 }
 Cabinet {
-  hidden position_6_0 -1.91944805632005e-05
-  hidden translation_7 -8.58363435314995e-06 1.234148894191378e-10 0
-  hidden rotation_7 0 0 -1 2.875587463465508e-05
-  translation 1.09004 4.71 0
+  translation 2.18004 4.71 0
   rotation 0 0 1 -1.5708053071795867
-  name "cabinet(8)"
+  name "cabinet(10)"
+  outerThickness 0.02
+  rowsHeights [
+    0.7, 0.3, 0.3
+  ]
+  columnsWidths [
+    0.6
+  ]
+  layout [
+    "LeftSidedDoor (1, 1, 1, 1, 1.5)"
+    "Shelf (1, 3, 1, 0)"
+    "Shelf (1, 2, 1, 0)"
+    "Shelf (1, 1, 1, 1)"
+  ]
+  handle CabinetHandle {
+    handleColor 0.533333 0.541176 0.521569
+  }
+  primaryAppearance MattePaint {
+    baseColor 0.729412 0.741176 0.713725
+  }
+  secondaryAppearance GlossyPaint {
+    baseColor 0.643137 0 0
+  }
+}
+Cabinet {
+  translation -2.21996 4.67144 0
+  rotation 0 0 1 -1.5708053071795867
+  name "cabinet(9)"
   outerThickness 0.02
   rowsHeights [
     0.7, 0.3, 0.3
@@ -122,7 +143,7 @@ Cabinet {
   }
 }
 DEF Robot Robot {
-  translation -0.0056309678345399395 0.48399375066234424 0.1094872802816073
+  translation 4.90606 -0.255528 0.10904
   rotation 0.023141689924100567 0.038578583202872135 0.9989875650404844 0.00214452
   children [
     DEF Stabilizator2 Solid {
@@ -276,8 +297,8 @@ DEF Robot Robot {
         }
       ]
       endPoint Solid {
-        translation -0.19999999999993578 0 -0.02
-        rotation 0.5736999078130065 0.5836714355284188 0.5746268973199414 2.084681963061572
+        translation -0.1999999999998997 0 -0.02
+        rotation 0.5736999078130085 0.5836714355284162 0.5746268973199424 2.084681963061556
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -799,7 +820,7 @@ DEF Robot Robot {
       ]
       endPoint Solid {
         translation 0.20003 0 -0.02
-        rotation 0.5737048611386516 0.5836231288135383 0.5746710152946436 2.0846942837549087
+        rotation 0.5737048611386559 0.5836231288135351 0.5746710152946426 2.0846942837548874
         children [
           DEF Wheel Shape {
             appearance PBRAppearance {
@@ -888,8 +909,58 @@ Wall {
   }
 }
 Wall {
+  translation -2.65 1.9 0
+  name "wall(9)"
+  size 0.05 1 0.62
+  appearance DEF SMALL_WALLS Roughcast {
+    colorOverride 0.890196 0.803922 1
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}
+Wall {
+  translation -2.65 3.37 0
+  name "wall(11)"
+  size 0.05 1 0.62
+  appearance DEF SMALL_WALLS Roughcast {
+    colorOverride 0.890196 0.803922 1
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}
+Wall {
+  translation -2.65 4.17 0
+  name "wall(12)"
+  size 0.05 1 0.62
+  appearance DEF SMALL_WALLS Roughcast {
+    colorOverride 0.890196 0.803922 1
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}
+Wall {
+  translation -2.65 -1.72 0
+  name "wall(10)"
+  size 0.05 1 0.62
+  appearance DEF SMALL_WALLS Roughcast {
+    colorOverride 0.890196 0.803922 1
+    textureTransform TextureTransform {
+      scale 1 2.4
+    }
+  }
+}
+Wall {
   translation 2.65 -0.77 0
   name "wall(1)"
+  size 0.05 3.55 0.62
+  appearance USE SMALL_WALLS
+}
+Wall {
+  translation 2.65 2.79 0
+  name "wall(13)"
   size 0.05 3.55 0.62
   appearance USE SMALL_WALLS
 }
@@ -1086,8 +1157,6 @@ Wall {
   size 0.06 6.2 2.5
 }
 Door {
-  hidden translation_5 0.0012126472243516873 1.7411538417499983e-05 -2.886579864025407e-15
-  hidden rotation_5 0 0 -1 0.00044767015625316904
   translation 0 4.8 0
   rotation 0 0 -1 1.5708
   size 0.06 1 2.5
@@ -1108,9 +1177,19 @@ Sofa {
   rotation 0 0 -1 -1.5707953071795862
 }
 Sofa {
-  translation 5.77999 4.23 0
+  translation 0.55999 1.2 0
   rotation 0 0 -1 -1.5707953071795862
+  name "sofa(3)"
+}
+Sofa {
+  translation 5.69515 3.81994 0
+  rotation 0 0 1 -2.3561953071795863
   name "sofa(1)"
+}
+Sofa {
+  translation 2.11911 1.65511 0
+  rotation 0 0 1 3.14159
+  name "sofa(2)"
 }
 PottedTree {
   translation 2.38 -2.15 0
@@ -1151,7 +1230,7 @@ Cabinet {
   }
 }
 Cabinet {
-  translation 2.62 0.22 0
+  translation 2.62 0.2 0
   rotation 0 0 1 3.14159
   name "cabinet(1)"
   outerThickness 0.02
@@ -1239,9 +1318,6 @@ Cabinet {
   }
 }
 Cabinet {
-  hidden position_6_0 -3.838361403394117e-05
-  hidden translation_7 -8.58363435314995e-06 1.234148894191378e-10 0
-  hidden rotation_7 0 0 -1 2.8755890078076515e-05
   translation -0.66 -2.49 0
   rotation 0 0 1 1.57079
   name "cabinet(5)"
@@ -1269,12 +1345,6 @@ Cabinet {
   }
 }
 Cabinet {
-  hidden position_6_0 3.160735359890821e-05
-  hidden translation_7 5.890229547630257e-06 6.973824295819497e-11 0
-  hidden rotation_7 0 0 0.9999999999999999 2.3679328307131472e-05
-  hidden position_10_0 3.160735359892844e-05
-  hidden translation_11 5.890229547624317e-06 6.973824295819497e-11 0
-  hidden rotation_11 0 0 1 2.3679328307131472e-05
   translation -1.52 -2.5 0.1
   rotation 0 0 -1 -1.5707853071795865
   name "cabinet(6)"
@@ -1863,30 +1933,27 @@ Keyboard {
   name "keyboard(5)"
 }
 OfficeChair {
-  hidden position_0_0 -8.671222788159128e-05
-  hidden rotation_1 0 0 -1 6.0628655434532335e-05
   translation -4.168759944968851 -1.9810399472398363 -0.0014153366372605114
   rotation 0.0006902835194082576 -0.0017016440609558823 0.999998313956655 0.7853981961094839
   name "office chair(3)"
 }
 OfficeChair {
-  hidden position_0_0 -8.671222788336763e-05
-  hidden rotation_1 0 0 -1 6.0628655434532335e-05
   translation -3.999999923780027 0.07000029839426258 -0.001415336637260567
   rotation -0.007325020258325069 -0.999973171675385 2.7723755400452033e-06 0.0014054612998912704
   name "office chair(4)"
 }
 OfficeChair {
-  hidden position_0_0 -8.671222788336763e-05
-  hidden rotation_1 0 0 -1 6.0628655434532335e-05
-  translation -4.069999944968854 1.8500000527601639 -0.0014153366372605392
+  translation -1.4466 4.47339 0.0037988
   rotation 0.0006902835194083594 -0.0017016440609559365 0.999998313956655 0.7853981961094835
   name "office chair(5)"
 }
 OfficeChair {
-  hidden position_0_0 -8.913151109268824e-05
-  hidden rotation_1 0 0 -0.9999999999999999 0.0006640302122486926
-  translation -2.2825200008248863 2.088160001221303 -0.0014153359064263682
+  translation 3.18748 4.42816 -0.009077
   rotation 0.000702712105931206 -5.5509168129919815e-06 0.9999997530824113 3.1415900076868852
+  name "office chair(2)"
+}
+OfficeChair {
+  translation 3.78748 4.42816 -0.00992018
+  rotation -0.007898816962180285 -0.999961615423028 0.0037916185417748486 -0.0014053071795858685
   name "office chair(1)"
 }

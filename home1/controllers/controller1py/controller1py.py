@@ -26,6 +26,7 @@ timestep = RobotParams.get_instance().get_timestep()
 
 def sensors_setup():
     supervisor = robot
+    global distance_sensors
 
     for i in range(robot.getNumberOfDevices()):
         device = robot.getDeviceByIndex(i)
@@ -36,6 +37,11 @@ def sensors_setup():
 
             sensor_node = supervisor.getFromDef(device.getName())
 
+    # invert order
+    distance_sensors = distance_sensors[::-1]
+    # shifts second half of sensors to the left
+    half = int(len(distance_sensors) / 2)
+    distance_sensors = distance_sensors[half:] + distance_sensors[:half]
     names = [sensor.getName() for sensor in distance_sensors]
 
 
@@ -177,14 +183,12 @@ def main_loop():
             rotation_field = robot_node.getField("rotation")
             current_rotation = rotation_field.getSFRotation()
             current_angle = current_rotation[3]
-            print(current_angle, current_rotation)
             if current_angle < prev_angle:
                 rotations += 1
             prev_angle = current_angle
 
             if math.fabs(current_angle - final_angle) < 0.1:
                 set_rotate_continous_signal_bool = 0
-                print("Rotation finished")
                 front_left.setVelocity(0)
                 front_right.setVelocity(0)
                 send_ok_status()

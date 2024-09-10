@@ -6,7 +6,6 @@ maximizedDockId: -1
 centralWidgetVisible: 1
 orthographicViewHeight: 1
 textFiles: 0 "controllers/controller1py/controller1py.py"
-globalOptionalRendering: DistanceSensorRays
 consoles: Console:All:All
 renderingDevicePerspectives: robot:CAM_NAME;1;1.95455;0;0
 renderingDevicePerspectives: robot:camera;1;1.1;0;0
