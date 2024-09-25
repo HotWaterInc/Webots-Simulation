@@ -165,13 +165,19 @@ def main_loop():
             set_robot_sample_image_inference = 0
 
         if set_sample_image_signal_bool:
+            # get pure image raw data as array
+            image = camera.getImage()
+            width = camera.getWidth()
+            height = camera.getHeight()
+
+            img_array = np.frombuffer(image, np.uint8).reshape((height, width, 4))
+            rgb_img = img_array[:, :, :3]
+
             data = {
                 "status": "ok",
-                "data": [counter],
+                "data": rgb_img.tolist(),
                 "params": collect_metadata(robot_node)
             }
-            counter += 1
-            camera.saveImage(f"./images/image{counter}.jpeg", 100)
 
             send_data(data)
             set_sample_image_signal_bool = 0
